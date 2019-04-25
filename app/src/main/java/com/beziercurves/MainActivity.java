@@ -1,7 +1,12 @@
 package com.beziercurves;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.view.View;
 
 import com.beziercurves.basic.CurveView;
@@ -43,9 +48,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(waveView);
         waveView.startAnimation();*/
 
-        SearchView searchView = new SearchView(this);
+        /*SearchView searchView = new SearchView(this);
         setContentView(searchView);
-        searchView.setState(SearchView.SearchState.START);
+        searchView.setState(SearchView.SearchState.START);*/
 
     }
+
 }

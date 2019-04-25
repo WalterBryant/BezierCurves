@@ -8,7 +8,7 @@
     tools:context=".MainActivity">
 
 
-    <com.beziercurves.dragbubble.DragBubbleView
+    <!--<com.beziercurves.dragbubble.DragBubbleView
         android:id="@+id/drag_bubble_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,6 +24,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="还原" />
+        android:text="还原" />-->
 
+    <com.beziercurves.mapview.MapView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </RelativeLayout>
