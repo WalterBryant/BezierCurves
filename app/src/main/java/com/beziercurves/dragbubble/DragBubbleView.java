@@ -14,9 +14,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.Rect;
-import android.os.Build;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -115,7 +113,7 @@ public class DragBubbleView extends View {
     private final float MOVE_OFFSET;
 
     /**
-     *  气泡爆炸的bitmap数组
+     * 气泡爆炸的bitmap数组
      */
     private Bitmap[] mBurstBitmapsArray;
     /**
@@ -129,32 +127,32 @@ public class DragBubbleView extends View {
     private int mCurDrawableIndex;
 
     /**
-     *  气泡爆炸的图片id数组
+     * 气泡爆炸的图片id数组
      */
     private int[] mBurstDrawablesArray = {R.mipmap.burst_1, R.mipmap.burst_2
             , R.mipmap.burst_3, R.mipmap.burst_4, R.mipmap.burst_5};
 
     public DragBubbleView(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public DragBubbleView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
     }
 
     public DragBubbleView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr,0);
+        this(context, attrs, defStyleAttr, 0);
     }
 
     public DragBubbleView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        TypedArray array = context.obtainStyledAttributes(attrs,R.styleable.DragBubbleView,defStyleAttr,0);
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.DragBubbleView, defStyleAttr, 0);
 
-        mBubbleRadius = array.getDimension(R.styleable.DragBubbleView_bubble_radius,mBubbleRadius);
+        mBubbleRadius = array.getDimension(R.styleable.DragBubbleView_bubble_radius, mBubbleRadius);
 
         mBubbleColor = array.getColor(R.styleable.DragBubbleView_bubble_color, Color.RED);
         mTextStr = array.getString(R.styleable.DragBubbleView_bubble_text);
-        mTextSize = array.getDimension(R.styleable.DragBubbleView_bubble_textSize,mTextSize);
+        mTextSize = array.getDimension(R.styleable.DragBubbleView_bubble_textSize, mTextSize);
         mTextColor = array.getColor(R.styleable.DragBubbleView_bubble_textColor, Color.WHITE);
         array.recycle();
 
@@ -189,43 +187,43 @@ public class DragBubbleView extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        initView(w,h);
+        initView(w, h);
     }
 
     /**
      * 初始化气泡位置
+     *
      * @param w
      * @param h
      */
     private void initView(int w, int h) {
 
         //设置两气泡圆心初始坐标
-        if(mBubStillCenter == null){
-            mBubStillCenter = new PointF(w / 2,h / 2);
-        }else{
-            mBubStillCenter.set(w / 2,h / 2);
+        if (mBubStillCenter == null) {
+            mBubStillCenter = new PointF(w / 2, h / 2);
+        } else {
+            mBubStillCenter.set(w / 2, h / 2);
         }
 
-        if(mBubMoveableCenter == null){
-            mBubMoveableCenter = new PointF(w / 2,h / 2);
-        }else{
-            mBubMoveableCenter.set(w / 2,h / 2);
+        if (mBubMoveableCenter == null) {
+            mBubMoveableCenter = new PointF(w / 2, h / 2);
+        } else {
+            mBubMoveableCenter.set(w / 2, h / 2);
         }
         mBubbleState = BUBBLE_STATE_DEFAUL;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()){
-            case MotionEvent.ACTION_DOWN:
-            {
-                if(mBubbleState != BUBBLE_STATE_DISMISS){
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                if (mBubbleState != BUBBLE_STATE_DISMISS) {
                     mDist = (float) Math.hypot(event.getX() - mBubStillCenter.x,
                             event.getY() - mBubStillCenter.y);
-                    if(mDist < mBubbleRadius + MOVE_OFFSET){
+                    if (mDist < mBubbleRadius + MOVE_OFFSET) {
                         // 加上MOVE_OFFSET是为了方便拖拽
                         mBubbleState = BUBBLE_STATE_CONNECT;
-                    }else{
+                    } else {
                         mBubbleState = BUBBLE_STATE_DEFAUL;
                     }
 
@@ -233,20 +231,19 @@ public class DragBubbleView extends View {
             }
             break;
 
-            case MotionEvent.ACTION_MOVE:
-            {
-                if(mBubbleState != BUBBLE_STATE_DEFAUL){
+            case MotionEvent.ACTION_MOVE: {
+                if (mBubbleState != BUBBLE_STATE_DEFAUL) {
                     mBubMoveableCenter.x = event.getX();
                     mBubMoveableCenter.y = event.getY();
                     mDist = (float) Math.hypot(event.getX() - mBubStillCenter.x,
                             event.getY() - mBubStillCenter.y);
-                    if(mBubbleState == BUBBLE_STATE_CONNECT){
+                    if (mBubbleState == BUBBLE_STATE_CONNECT) {
                         // 减去MOVE_OFFSET是为了让不动气泡半径到一个较小值时就直接消失
                         // 或者说是进入分离状态
-                        if(mDist < mMaxDist - MOVE_OFFSET){
+                        if (mDist < mMaxDist - MOVE_OFFSET) {
 
                             mBubStillRadius = mBubbleRadius - mDist / 8;
-                        }else{
+                        } else {
                             mBubbleState = BUBBLE_STATE_APART;
                         }
                     }
@@ -255,15 +252,14 @@ public class DragBubbleView extends View {
             }
             break;
 
-            case MotionEvent.ACTION_UP:
-            {
-                if(mBubbleState == BUBBLE_STATE_CONNECT){
+            case MotionEvent.ACTION_UP: {
+                if (mBubbleState == BUBBLE_STATE_CONNECT) {
                     startBubbleRestAnim();
 
-                }else if(mBubbleState == BUBBLE_STATE_APART){
-                    if(mDist < 2 * mBubbleRadius){
+                } else if (mBubbleState == BUBBLE_STATE_APART) {
+                    if (mDist < 2 * mBubbleRadius) {
                         startBubbleRestAnim();
-                    }else{
+                    } else {
                         startBubbleBurstAnim();
                     }
                 }
@@ -302,8 +298,8 @@ public class DragBubbleView extends View {
 
     private void startBubbleRestAnim() {
         ValueAnimator anim = ValueAnimator.ofObject(new PointFEvaluator(),
-                new PointF(mBubMoveableCenter.x,mBubMoveableCenter.y),
-                new PointF(mBubStillCenter.x,mBubStillCenter.y));
+                new PointF(mBubMoveableCenter.x, mBubMoveableCenter.y),
+                new PointF(mBubStillCenter.x, mBubStillCenter.y));
 
         anim.setDuration(200);
         anim.setInterpolator(new OvershootInterpolator(5f));
@@ -333,21 +329,20 @@ public class DragBubbleView extends View {
         // 4、画消失状态---爆炸动画
 
         // 1、画拖拽的气泡 和 文字
-        if(mBubbleState != BUBBLE_STATE_DISMISS){
-            canvas.drawCircle(mBubMoveableCenter.x,mBubMoveableCenter.y,
-                    mBubMoveableRadius,mBubblePaint);
+        if (mBubbleState != BUBBLE_STATE_DISMISS) {
+            canvas.drawCircle(mBubMoveableCenter.x, mBubMoveableCenter.y,
+                    mBubMoveableRadius, mBubblePaint);
 
-            mTextPaint.getTextBounds(mTextStr,0,mTextStr.length(),mTextRect);
+            mTextPaint.getTextBounds(mTextStr, 0, mTextStr.length(), mTextRect);
 
-            canvas.drawText(mTextStr,mBubMoveableCenter.x - mTextRect.width() / 2,
-                    mBubMoveableCenter.y + mTextRect.height() / 2,mTextPaint);
+            canvas.drawText(mTextStr, mBubMoveableCenter.x - mTextRect.width() / 2,
+                    mBubMoveableCenter.y + mTextRect.height() / 2, mTextPaint);
         }
         // 2、画相连的气泡状态
-        if(mBubbleState == BUBBLE_STATE_CONNECT)
-        {
+        if (mBubbleState == BUBBLE_STATE_CONNECT) {
             // 1、画静止气泡
-            canvas.drawCircle(mBubStillCenter.x,mBubStillCenter.y,
-                    mBubStillRadius,mBubblePaint);
+            canvas.drawCircle(mBubStillCenter.x, mBubStillCenter.y,
+                    mBubStillRadius, mBubblePaint);
             // 2、画相连曲线
             // 计算控制点坐标，两个圆心的中点
             int iAnchorX = (int) ((mBubStillCenter.x + mBubMoveableCenter.x) / 2);
@@ -367,25 +362,25 @@ public class DragBubbleView extends View {
 
             mBezierPath.reset();
             // 画上半弧
-            mBezierPath.moveTo(iBubStillStartX,iBubStillStartY);
-            mBezierPath.quadTo(iAnchorX,iAnchorY,iBubMoveableEndX,iBubMoveableEndY);
+            mBezierPath.moveTo(iBubStillStartX, iBubStillStartY);
+            mBezierPath.quadTo(iAnchorX, iAnchorY, iBubMoveableEndX, iBubMoveableEndY);
             // 画上半弧
-            mBezierPath.lineTo(iBubMoveableStartX,iBubMoveableStartY);
-            mBezierPath.quadTo(iAnchorX,iAnchorY,iBubStillEndX,iBubStillEndY);
+            mBezierPath.lineTo(iBubMoveableStartX, iBubMoveableStartY);
+            mBezierPath.quadTo(iAnchorX, iAnchorY, iBubStillEndX, iBubStillEndY);
             mBezierPath.close();
-            canvas.drawPath(mBezierPath,mBubblePaint);
+            canvas.drawPath(mBezierPath, mBubblePaint);
         }
 
         // 3、画消失状态---爆炸动画
 
-        if(mIsBurstAnimStart){
-            mBurstRect.set((int)(mBubMoveableCenter.x - mBubMoveableRadius),
-                    (int)(mBubMoveableCenter.y - mBubMoveableRadius),
-                    (int)(mBubMoveableCenter.x + mBubMoveableRadius),
-                    (int)(mBubMoveableCenter.y + mBubMoveableRadius));
+        if (mIsBurstAnimStart) {
+            mBurstRect.set((int) (mBubMoveableCenter.x - mBubMoveableRadius),
+                    (int) (mBubMoveableCenter.y - mBubMoveableRadius),
+                    (int) (mBubMoveableCenter.x + mBubMoveableRadius),
+                    (int) (mBubMoveableCenter.y + mBubMoveableRadius));
 
-            canvas.drawBitmap(mBurstBitmapsArray[mCurDrawableIndex],null,
-                    mBurstRect,mBubblePaint);
+            canvas.drawBitmap(mBurstBitmapsArray[mCurDrawableIndex], null,
+                    mBurstRect, mBubblePaint);
         }
 
 
@@ -408,7 +403,7 @@ public class DragBubbleView extends View {
     }
 
     public void reset() {
-        initView(getWidth(),getHeight());
+        initView(getWidth(), getHeight());
 
         invalidate();
     }
